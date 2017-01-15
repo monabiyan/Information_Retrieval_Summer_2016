@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<!-- saved from url=(0077)http://www.ccs.neu.edu/home/vip/teach/IRcourse/2_indexing_ngrams/HW2/hw2.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us" class="gr__ccs_neu_edu"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width,
+      initial-scale=1.0, maximum-scale=1">
+    <title>Homework 2</title>
+    <link rel="stylesheet" href="./Homework 2_files/css" type="text/css">
+    <link rel="stylesheet" href="./Homework 2_files/normalize.3.0.1.css">
+    <link rel="stylesheet" href="./Homework 2_files/course.css">
+    <link rel="shortcut icon" href="http://www.ccs.neu.edu/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" href="http://www.ccs.neu.edu/apple-touch-icon-144-precomposed.png" sizes="144x144">
+    <link rel="alternate" href="http://www.ccs.neu.edu/home/vip/teach/IRcourse/2_indexing_ngrams/HW2/hw2.html" type="application/rss+xml" title="CS6200: Information Retrieval">
+    <link rel="stylesheet" href="./Homework 2_files/bootstrap.min.css">
+    <link rel="stylesheet" href="./Homework 2_files/bootstrap-theme.min.css">
+  <style type="text/css"></style></head>
+  <body class="li-body" data-gr-c-s-loaded="true">
+    <section id="main">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div>
+              <article id="content">
+                <h3 style="background-color: white; color: black;
+                  font-family: AppleGothic;"><big><big><big><small>CS6200
+
+
+
+
+
+
+
+
+
+
+
+
+                          Information Retrieval<br>
+                        </small> <small><font color="#3333ff">Homework2:
+
+
+
+
+
+
+
+                            Indexing, Term Positions</font></small></big></big></big></h3>
+                <h1 id="objective:92351f2a225a2a9d81ca1344e332ec47">Objective</h1>
+                <p>Implement your own index to take the place of
+                  elasticsearch in the HW1 code, and index the document
+                  collection used for HW1. Your index should be able to
+                  handle large numbers of documents and terms without
+                  using excessive memory or disk I/O.</p>
+                <p>This involves writing two programs:</p>
+                <ol>
+                  <li>A tokenizer and indexer</li>
+                  <li>An updated version of your HW1 ranker which uses
+                    your inverted index</li>
+                </ol>
+                <p>You have some flexibility in the choice of algorithms
+                  and file formats for this assignment. You will be
+                  asked to explain and justify your approach, but any
+                  reasonable approach will work.</p>
+                <h1 id="step-one-tokenizing:92351f2a225a2a9d81ca1344e332ec47">Step
+
+
+
+
+
+                  One: Tokenizing</h1>
+                <p>The first step of indexing is tokenizing documents
+                  from the collection. That is, given a raw document you
+                  need to produce a sequence of <em>tokens</em>. For
+                  the purposes of this assignment, a token is a
+                  contiguous sequence of characters which matches a
+                  regular expression (of your choice) – that is, any
+                  number of letters and numbers, possibly separated by
+                  single periods in the middle. For instance, <code>bob</code>
+                  and <code>376</code> and <code>98.6</code> and <code>192.160.0.1</code>
+                  are all tokens. <code>123,456</code> and <code>aunt's</code>
+                  are not tokens (each of these examples is two tokens
+                  —&nbsp;why?). All alphabetic characters should be
+                  converted to lowercase during tokenization, so <code>bob</code>
+                  and <code>Bob</code> and <code>BOB</code> are all
+                  tokenized into <code>bob</code>.</p>
+                <p>You should assign a unique integer ID to each term
+                  and document in the collection. For instance, you
+                  might want to use a token’s hash code as its ID.
+                  However you decide to assign IDs, you will need to be
+                  able to convert tokens into term IDs and covert doc
+                  IDs into document names in order to run queries. This
+                  will likely require you to store the maps from term to
+                  term_id and from document to doc_id in your inverted
+                  index. One way to think about the tokenization process
+                  is as a conversion from a document to a sequence of <code>(term_id,
+
+
+
+
+
+                    doc_id, position)</code> tuples which need to be
+                  stored in your inverted index.</p>
+                <p>For instance, given a document with doc_id 20:</p>
+                <pre><code>The car was in the car wash.
+</code></pre>
+                <p>the tokenizer might produce the tuples:</p>
+                <pre><code>(1, 20, 1), (2, 20, 2), (3, 20, 3), (4, 20, 4), (1, 20, 5), (2, 20, 6), (5, 20, 7)
+</code></pre>
+                <p>with the term ID map:</p>
+                <pre><code>1: the
+2: car
+3: was
+4: in
+5: wash
+</code></pre>
+                <h1 id="step-two-indexing:92351f2a225a2a9d81ca1344e332ec47">Step
+
+
+
+
+
+                  Two: Indexing</h1>
+                <p>The next step is to record each document’s tokens in
+                  an inverted index. The inverted list for a term must
+                  contain the following information:</p>
+                <ul>
+                  <li>The DF and CF (aka TTF) of the term.</li>
+                  <li>A list of IDs of the documents which contain the
+                    term, along with the TF of the term within that
+                    document and a list of positions within the document
+                    where the term occurs. (The first term in a document
+                    has position 1, the second term has position 2,
+                    etc.)</li>
+                </ul>
+                <p>You should also store the following information.</p>
+                <ul>
+                  <li>The total number of distinct terms (the vocabulary
+                    size) and the total number of tokens (total CF) in
+                    the document collection.</li>
+                  <li>The map between terms and their IDs, if required
+                    by your design.</li>
+                  <li>The map between document names and their IDs, if
+                    required by your design.</li>
+                </ul>
+                <h1 id="stemming-and-stopping:92351f2a225a2a9d81ca1344e332ec47">Stemming
+
+
+
+
+
+                  and Stopping</h1>
+                <p>Experiment with the affects of stemming and stop word
+                  removal on query performance. To do so, create four
+                  separate indexes:</p>
+                <ul>
+                  <li>An index where tokens are indexed as-is</li>
+                  <li>An index where stop words are not indexed, and are
+                    removed from queries during query processing</li>
+                  <li>An index where tokens are stemmed before indexing,
+                    and stemmed in queries during query processing</li>
+                  <li>An index where tokens are stemmed and stop words
+                    are removed</li>
+                </ul>
+                <p>You should use <a href="http://www.ccs.neu.edu/home/vip/teach/IRcourse/2_indexing_ngrams/HW2/stoplist.txt">this list</a>
+                  of stop words, obtained from NLTK.</p>
+                <p>You may use any standard stemming library. For
+                  instance, the python <code>stemming</code> package
+                  and the Java <code>Weka</code> package contain
+                  stemmer implementations.</p>
+                <h2 id="performance-requirements:92351f2a225a2a9d81ca1344e332ec47">Performance
+
+
+
+
+
+                  Requirements</h2>
+                <p>Your indexing algorithm should meet the following
+                  performance requirements. You will be asked during
+                  your demo to explain how you met them.</p>
+                <ul>
+                  <li>Extra Credit Option: You are permitted to write
+                    multiple files during the indexing process, but not
+                    more than about 1,000 files total. For instance, you
+                    may not store the inverted list for each term in a
+                    separate file.</li>
+                  <li>If you keep partial inverted lists in memory
+                    during indexing, you have to limit by number of
+                    documents (not store more than 1,000 postings per
+                    term in memory at a time). <br>
+                  </li>
+                  <li>Your final inverted index should be stored in a
+                    single (or few) file(s), no more than 20. The total
+                    size must be at most that of the size of the
+                    unindexed document collection, around 300MB with
+                    stopwords, and around 170MB without stopwords.</li>
+                  <li>You should be able to access the inverted list for
+                    an arbitrary term in time at most logarithmic in the
+                    vocabulary size, regardless of where that term’s
+                    information is stored in the index. You should not
+                    need to find an inverted list by scanning through
+                    the entire index.</li>
+                </ul>
+                <h1 id="step-three-searching:92351f2a225a2a9d81ca1344e332ec47">Step
+
+
+
+
+
+                  Three: Searching</h1>
+                <p>Update your solution to HW1 to use your index instead
+                  of elasticsearch. Compare your results to those you
+                  obtained in HW1. Are they different? If so, why? You
+                  dont have to run all 5 models; one VSM, one LM, and
+                  BM25 will suffice.</p>
+                <h2 id="performance-requirements:92351f2a225a2a9d81ca1344e332ec47">Proximity
+
+
+
+
+
+                  Search</h2>
+                <p>Add one retrieval model, with scoring based on
+                  proximity on query terms in the document. You can use
+                  the ideas presented in slides, or <a href="http://www.ccs.neu.edu/home/vip/teach/IRcourse/2_indexing_ngrams/lecture_notes/SteveKrenzel-FindingBlurbs.pdf">skipgrams
+
+
+
+
+
+                    minimum span</a>, or other ngram matching ideas.</p>
+                <h1 id="some-hints:92351f2a225a2a9d81ca1344e332ec47">Some
+
+
+
+
+
+                  Hints</h1>
+                <p>There are many ways to write an indexing algorithm.
+                  We have intentionally not specified a particular
+                  algorithm or file format.</p>
+                <p>The primary challenge is to produce a single index
+                  file which uses a variable number of bytes for each
+                  term (because their inverted lists have different
+                  lengths), without any prior knowledge about how long
+                  each list will need to be. Here are a few reasonable
+                  approaches you might consider.</p>
+                <p><strong>Option 1- Required: Merging</strong></p>
+                <p>Create partial inverted lists for all terms in a
+                  single pass through the collection. As each partial
+                  list is filled, append it to the end of a single large
+                  index file. When all documents have been processed,
+                  run through the file a term at a time and merge the
+                  partial lists for each term. This second step can be
+                  greatly accelerated if you keep a list of the
+                  positions of all the partial lists for each term in
+                  some secondary data structure or file.</p>
+                <p><strong><br>
+                    Option 2: Discontiguous Postings</strong></p>
+                <p>Lay out your index file as a series of fixed-length
+                  records of, say, 4096 bytes each. Each record will
+                  contain a portion of the inverted list for a term. A
+                  record will consist of a header followed by a series
+                  of inverted list entries. The header will specify the
+                  term_id, the number of inverted list entries used in
+                  the record, and the file offset of the next record for
+                  the term. Records are written to the file in a single
+                  pass through the document collection, and the records
+                  for a given term are not necessarily adjacent within
+                  the index.<br>
+                </p>
+                <p><strong><br>
+                    Extra Credit Alternative: Multiple passes</strong> </p>
+                <p>Make multiple passes through the document collection.
+                  In each pass, you create the inverted lists for the
+                  next 1,000 terms, each in its own file. At the end of
+                  each pass, you concatenate the new inverted lists onto
+                  the main index file (easy to concatenate the inverted
+                  files, but have to manage the catalog/offsets files)</p>
+                <h1 id="extra-credit:92351f2a225a2a9d81ca1344e332ec47">Extra
+
+
+
+
+
+                  Credit</h1>
+                <p>These extra problems are provided for students who
+                  wish to dig deeper into this project. Extra credit is
+                  meant to be significantly harder and more open-ended
+                  than the standard problems. We strongly recommend
+                  completing all of the above before attempting any of
+                  these problems.</p>
+                <p>Points will be awarded based on the difficulty of the
+                  solution you attempt and how far you get. You will
+                  receive no credit unless your solution is “at least
+                  half right,” as determined by the graders.</p>
+                <h2 id="ec1-index-compression:92351f2a225a2a9d81ca1344e332ec47">EC1:
+
+
+
+
+
+                  Index Compression</h2>
+                <p>Store the index in some compressed format and
+                  decompress it as needed when accessing it. For the
+                  sake of this assignment, you may not use a library for
+                  compression or decompression. For instance, it is not
+                  sufficient to run inverted lists through a gzip/gunzip
+                  routine in a library.</p>
+                <h2 id="ec2-multiple-fields:92351f2a225a2a9d81ca1344e332ec47">EC2:
+
+
+
+
+
+                  Multiple Fields</h2>
+                <p>Provide the ability to index multiple document
+                  fields. Index the contents of the HEAD fields for a
+                  document (if any) in addition to the TEXT fields.
+                  Update your retrieval models to query the HEAD fields
+                  as well as the TEXT fields, weighting HEAD matches
+                  higher than TEXT matches. Does this improve retrieval
+                  performance? Why?</p>
+                <h2 id="ec3-query-optimization:92351f2a225a2a9d81ca1344e332ec47">EC3:
+
+
+
+
+
+                  Query Optimization</h2>
+                <p>Implement and compare multiple query processing
+                  algorithms (e.g., variations of doc-at-a-time and
+                  term-at-a-time matching) to achieve the best possible
+                  query performance. Include at least one inexact query
+                  processing method. How much can you improve query
+                  speed without overly sacrificing result quality?</p>
+                <h3 id="rubric:92351f2a225a2a9d81ca1344e332ec47">Rubric</h3>
+                <dl class="dl-horizontal">
+                  <dt>20 points</dt>
+                  <dd>The correct tokens are produced</dd>
+                  <dt>30 points</dt>
+                  <dd>The correct inverted lists are produced</dd>
+                  <dt>20 points</dt>
+                  <dd>You meet the performance requirements</dd>
+                  <dt>20 points</dt>
+                  <dd>Your retrieval models perform as expected on your
+                    index</dd>
+                  <dt>10 points</dt>
+                  <dd>The proximity model perform as expected on your
+                    index</dd>
+                </dl>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="li-page-footer">
+      <div class="container">
+        <div class="row">
+          <div class="sixteen columns">
+            <div class="li-page-footer-legal"> © 2015 Northeastern
+              University. All rights reserved. </div>
+          </div>
+        </div>
+      </div>
+      <script src="./Homework 2_files/jquery-2.1.3.min.js"></script>
+      <script src="./Homework 2_files/bootstrap.min.js"></script>
+      <script type="text/javascript" src="./Homework 2_files/MathJax.js"></script>
+      <script type="text/x-mathjax-config">
+	MathJax.Hub.Config({
+	  tex2jax: {
+	    inlineMath: [['$','$']],
+	    displayMath: [['$$','$$']],
+	    processEscapes: true,
+	    processEnvironments: true,
+	    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+	    TeX: { equationNumbers: { autoNumber: "AMS" },
+	         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+	  }
+	});
+	</script>
+      <script type="text/x-mathjax-config">
+	  MathJax.Hub.Queue(function() {
+	    
+	    
+	    
+	    var all = MathJax.Hub.getAllJax(), i;
+	    for(i = 0; i < all.length; i += 1) {
+	        all[i].SourceElement().parentNode.className += ' has-jax';
+	    }
+	});
+	</script> </footer>
+    <script type="text/javascript">
+    <!--
+    function toggle(id) {
+        var e = document.getElementById(id);
+        e.style.display == 'block' ? e.style.display = 'none' : e.style.display = 'block';
+    }
+    
+    </script>
+    <script>document.write('<script src="http://'
+        + (location.host || 'localhost').split(':')[0]
+		+ ':1313/livereload.js?mindelay=10"></'
+        + 'script>')</script><script src="http://www.ccs.neu.edu:1313/livereload.js?mindelay=10"></script>
+  
+
+<div id="SL_balloon_obj" alt="0" style="display: block;"><div id="SL_button" class="ImTranslatorLogo" style="display: block; visibility: hidden; opacity: 0; transition: visibility 3s, opacity 3s linear; left: 552px; top: 1062px; background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/imtranslator-s.png&quot;);"></div><div id="SL_shadow_translation_result2" style="display: none;"></div><div id="SL_shadow_translator" style="display: none;"><div id="SL_planshet" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/bg2.png&quot;) rgb(244, 245, 245);"><div id="SL_providers"><div class="SL_BL_LABLE_ON" title="Google" id="SL_P0">G</div><div class="SL_BL_LABLE_ON" title="Microsoft" id="SL_P1">M</div><div class="SL_BL_LABLE_ON" title="Translator" id="SL_P2">T</div></div><div id="SL_TB"><div id="SL_bubblelogo" class="ImTranslatorLogo" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/imtranslator-s.png&quot;);"></div><table id="SL_tables" cellspacing="1"><tr><td class="SL_td" width="10%" align="right"><input id="SLloc" type="checkbox" title="Lock-in language"></td><td class="SL_td" width="20%" align="left"><select id="SL_lng_from"><option value="auto">Detect language</option><option value="af">Afrikaans</option><option value="sq">Albanian</option><option value="ar">Arabic</option><option value="hy">Armenian</option><option value="az">Azerbaijani</option><option value="eu">Basque</option><option value="be">Belarusian</option><option value="bn">Bengali</option><option value="bs">Bosnian</option><option value="bg">Bulgarian</option><option value="ca">Catalan</option><option value="ceb">Cebuano</option><option value="ny">Chichewa</option><option value="zh-CN">Chinese (Simplified)</option><option value="zh-TW">Chinese (Traditional)</option><option value="hr">Croatian</option><option value="cs">Czech</option><option value="da">Danish</option><option value="nl">Dutch</option><option value="en">English</option><option value="eo">Esperanto</option><option value="et">Estonian</option><option value="tl">Filipino</option><option value="fi">Finnish</option><option value="fr">French</option><option value="gl">Galician</option><option value="ka">Georgian</option><option value="de">German</option><option value="el">Greek</option><option value="gu">Gujarati</option><option value="ht">Haitian Creole</option><option value="ha">Hausa</option><option value="iw">Hebrew</option><option value="hi">Hindi</option><option value="hmn">Hmong</option><option value="hu">Hungarian</option><option value="is">Icelandic</option><option value="ig">Igbo</option><option value="id">Indonesian</option><option value="ga">Irish</option><option value="it">Italian</option><option value="ja">Japanese</option><option value="jw">Javanese</option><option value="kn">Kannada</option><option value="kk">Kazakh</option><option value="km">Khmer</option><option value="ko">Korean</option><option value="lo">Lao</option><option value="la">Latin</option><option value="lv">Latvian</option><option value="lt">Lithuanian</option><option value="mk">Macedonian</option><option value="mg">Malagasy</option><option value="ms">Malay</option><option value="ml">Malayalam</option><option value="mt">Maltese</option><option value="mi">Maori</option><option value="mr">Marathi</option><option value="mn">Mongolian</option><option value="my">Myanmar (Burmese)</option><option value="ne">Nepali</option><option value="no">Norwegian</option><option value="fa">Persian</option><option value="pl">Polish</option><option value="pt">Portuguese</option><option value="pa">Punjabi</option><option value="ro">Romanian</option><option value="ru">Russian</option><option value="sr">Serbian</option><option value="st">Sesotho</option><option value="si">Sinhala</option><option value="sk">Slovak</option><option value="sl">Slovenian</option><option value="so">Somali</option><option value="es">Spanish</option><option value="su">Sundanese</option><option value="sw">Swahili</option><option value="sv">Swedish</option><option value="tg">Tajik</option><option value="ta">Tamil</option><option value="te">Telugu</option><option value="th">Thai</option><option value="tr">Turkish</option><option value="uk">Ukrainian</option><option value="ur">Urdu</option><option value="uz">Uzbek</option><option value="vi">Vietnamese</option><option value="cy">Welsh</option><option value="yi">Yiddish</option><option value="yo">Yoruba</option><option value="zu">Zulu</option></select></td><td class="SL_td" width="3" align="center"><div id="SL_switch_b" title="Switch languages" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/switchb.png&quot;);"></div></td><td class="SL_td" width="20%" align="left"><select id="SL_lng_to"><option value="af">Afrikaans</option><option value="sq">Albanian</option><option value="ar">Arabic</option><option value="hy">Armenian</option><option value="az">Azerbaijani</option><option value="eu">Basque</option><option value="be">Belarusian</option><option value="bn">Bengali</option><option value="bs">Bosnian</option><option value="bg">Bulgarian</option><option value="ca">Catalan</option><option value="ceb">Cebuano</option><option value="ny">Chichewa</option><option value="zh-CN">Chinese (Simplified)</option><option value="zh-TW">Chinese (Traditional)</option><option value="hr">Croatian</option><option value="cs">Czech</option><option value="da">Danish</option><option value="nl">Dutch</option><option value="en">English</option><option value="eo">Esperanto</option><option value="et">Estonian</option><option value="tl">Filipino</option><option value="fi">Finnish</option><option value="fr">French</option><option value="gl">Galician</option><option value="ka">Georgian</option><option value="de">German</option><option value="el">Greek</option><option value="gu">Gujarati</option><option value="ht">Haitian Creole</option><option value="ha">Hausa</option><option value="iw">Hebrew</option><option value="hi">Hindi</option><option value="hmn">Hmong</option><option value="hu">Hungarian</option><option value="is">Icelandic</option><option value="ig">Igbo</option><option value="id">Indonesian</option><option value="ga">Irish</option><option value="it">Italian</option><option value="ja">Japanese</option><option value="jw">Javanese</option><option value="kn">Kannada</option><option value="kk">Kazakh</option><option value="km">Khmer</option><option value="ko">Korean</option><option value="lo">Lao</option><option value="la">Latin</option><option value="lv">Latvian</option><option value="lt">Lithuanian</option><option value="mk">Macedonian</option><option value="mg">Malagasy</option><option value="ms">Malay</option><option value="ml">Malayalam</option><option value="mt">Maltese</option><option value="mi">Maori</option><option value="mr">Marathi</option><option value="mn">Mongolian</option><option value="my">Myanmar (Burmese)</option><option value="ne">Nepali</option><option value="no">Norwegian</option><option value="fa">Persian</option><option value="pl">Polish</option><option value="pt">Portuguese</option><option value="pa">Punjabi</option><option value="ro">Romanian</option><option value="ru">Russian</option><option value="sr">Serbian</option><option value="st">Sesotho</option><option value="si">Sinhala</option><option value="sk">Slovak</option><option value="sl">Slovenian</option><option value="so">Somali</option><option selected="selected" value="es">Spanish</option><option value="su">Sundanese</option><option value="sw">Swahili</option><option value="sv">Swedish</option><option value="tg">Tajik</option><option value="ta">Tamil</option><option value="te">Telugu</option><option value="th">Thai</option><option value="tr">Turkish</option><option value="uk">Ukrainian</option><option value="ur">Urdu</option><option value="uz">Uzbek</option><option value="vi">Vietnamese</option><option value="cy">Welsh</option><option value="yi">Yiddish</option><option value="yo">Yoruba</option><option value="zu">Zulu</option></select></td><td class="SL_td" width="5%" align="center"> </td><td class="SL_td" width="8%" align="center"><div id="SL_TTS_voice" title="Listen to the translation" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/tts-voice.png&quot;);"></div></td><td class="SL_td" width="8%" align="center"><div id="SL_copy" title="Copy translation" class="SL_copy" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/copy_hand.png&quot;);"></div></td><td class="SL_td" width="8%" align="center"><div id="SL_bbl_font_patch" onclick="alert(FExtension.element(&#39;extNot_available&#39;))"></div><div id="SL_bbl_font" title="Font size" class="SL_bbl_font" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/font-off.png&quot;);"></div></td><td class="SL_td" width="8%" align="center"><div id="SL_TH" title="Translation History" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/history.png&quot;);"></div></td><td class="SL_td" width="18%"></td><td class="SL_td" width="8%" align="right"><div id="SL_pin" title="Pin pop-up bubble" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/pin-on.png&quot;);"></div></td></tr></table></div></div><div id="SL_shadow_translation_result" style="visibility: visible; background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/bg.png&quot;) rgb(255, 255, 255);"></div><div id="SL_loading" class="SL_loading" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/loading.gif&quot;);"></div><div id="SL_player2" style="display: none; height: 0px; width: 0px;"></div><div id="SL_alert100" style="display: none; background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/bg2.png&quot;);">Text-to-speech function is limited to 100 characters</div><div id="SL_bbl_donate" title="Make a small contribution" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/donate2.png&quot;);"></div><div id="SL_Balloon_options" style="background: url(&quot;chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/img/util/bg3.png&quot;) rgb(255, 255, 255);"><a href="chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/html/options/options.html?bbl" target="_blank" class="SL_options" title="Show options">Options</a> : <a href="chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/html/options/options.html?hist" target="_blank" class="SL_options" title="Translation History">History</a> : <a href="http://about.imtranslator.net/tutorials/presentations/imtranslator-for-chrome/chrome-bubble-translator/" target="_blank" class="SL_options" title="ImTranslator Help">Help</a> : <a href="chrome-extension://noaijdpnepcgjemiklgfkcfbkokogabh/content/html/options/options.html?feed" target="_blank" class="SL_options" title="ImTranslator Feedback">Feedback</a><span id="SL_Balloon_Close" title="Close">Close</span></div></div></div></body></html>

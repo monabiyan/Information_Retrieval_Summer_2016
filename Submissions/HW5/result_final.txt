@@ -1,0 +1,170 @@
+query id = 60
+for k = 5 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 10 precision = 0.1  recall = 0.333333333333  f_measuere = 0.153846153846  
+for k = 20 precision = 0.1  recall = 0.666666666667  f_measuere = 0.173913043478  
+for k = 50 precision = 0.04  recall = 0.666666666667  f_measuere = 0.0754716981132  
+for k = 100 precision = 0.03  recall = 1.0  f_measuere = 0.0582524271845  
+    Average Precision =  0.0408163265306
+    NDCG= 0.285350309689
+    R-Precision =  0.142857142857
+#########################################################################
+query id = 61
+for k = 5 precision = 0.4  recall = 0.0909090909091  f_measuere = 0.148148148148  
+for k = 10 precision = 0.2  recall = 0.0909090909091  f_measuere = 0.125  
+for k = 20 precision = 0.25  recall = 0.227272727273  f_measuere = 0.238095238095  
+for k = 50 precision = 0.2  recall = 0.454545454545  f_measuere = 0.277777777778  
+for k = 100 precision = 0.13  recall = 0.590909090909  f_measuere = 0.213114754098  
+    Average Precision =  0.175740771162
+    NDCG= 0.591218118241
+    R-Precision =  0.291666666667
+#########################################################################
+query id = 62
+for k = 5 precision = 0.4  recall = 0.0181818181818  f_measuere = 0.0347826086957  
+for k = 10 precision = 0.4  recall = 0.0363636363636  f_measuere = 0.0666666666667  
+for k = 20 precision = 0.5  recall = 0.0909090909091  f_measuere = 0.153846153846  
+for k = 50 precision = 0.4  recall = 0.181818181818  f_measuere = 0.25  
+for k = 100 precision = 0.37  recall = 0.336363636364  f_measuere = 0.352380952381  
+    Average Precision =  0.293050046709
+    NDCG= 0.733655969628
+    R-Precision =  0.35652173913
+#########################################################################
+query id = 89
+for k = 5 precision = 0.6  recall = 0.142857142857  f_measuere = 0.230769230769  
+for k = 10 precision = 0.5  recall = 0.238095238095  f_measuere = 0.322580645161  
+for k = 20 precision = 0.3  recall = 0.285714285714  f_measuere = 0.292682926829  
+for k = 50 precision = 0.2  recall = 0.47619047619  f_measuere = 0.281690140845  
+for k = 100 precision = 0.17  recall = 0.809523809524  f_measuere = 0.280991735537  
+    Average Precision =  0.241082238254
+    NDCG= 0.689103066118
+    R-Precision =  0.269230769231
+#########################################################################
+query id = 64
+for k = 5 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 10 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 20 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 50 precision = 0.22  recall = 0.0940170940171  f_measuere = 0.131736526946  
+for k = 100 precision = 0.26  recall = 0.222222222222  f_measuere = 0.239631336406  
+    Average Precision =  0.206920980273
+    NDCG= 0.645579640489
+    R-Precision =  0.235772357724
+#########################################################################
+query id = 68
+for k = 5 precision = 0.4  recall = 0.222222222222  f_measuere = 0.285714285714  
+for k = 10 precision = 0.2  recall = 0.222222222222  f_measuere = 0.210526315789  
+for k = 20 precision = 0.1  recall = 0.222222222222  f_measuere = 0.137931034483  
+for k = 50 precision = 0.12  recall = 0.666666666667  f_measuere = 0.203389830508  
+for k = 100 precision = 0.07  recall = 0.777777777778  f_measuere = 0.128440366972  
+    Average Precision =  0.158410575303
+    NDCG= 0.526528002283
+    R-Precision =  0.153846153846
+#########################################################################
+query id = 80
+for k = 5 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 10 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 20 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 50 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 100 precision = 0.02  recall = 0.666666666667  f_measuere = 0.0388349514563  
+    Average Precision =  0.00930276045883
+    NDCG= 0.164382892721
+    R-Precision =  0.0
+#########################################################################
+query id = 87
+for k = 5 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 10 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 20 precision = 0.05  recall = 0.142857142857  f_measuere = 0.0740740740741  
+for k = 50 precision = 0.04  recall = 0.285714285714  f_measuere = 0.0701754385965  
+for k = 100 precision = 0.02  recall = 0.285714285714  f_measuere = 0.0373831775701  
+    Average Precision =  0.00317463640412
+    NDCG= 0.228135847775
+    R-Precision =  0.0425531914894
+#########################################################################
+query id = 85
+for k = 5 precision = 0.6  recall = 0.0152284263959  f_measuere = 0.029702970297  
+for k = 10 precision = 0.8  recall = 0.0406091370558  f_measuere = 0.0772946859903  
+for k = 20 precision = 0.6  recall = 0.0609137055838  f_measuere = 0.110599078341  
+for k = 50 precision = 0.52  recall = 0.131979695431  f_measuere = 0.210526315789  
+for k = 100 precision = 0.44  recall = 0.223350253807  f_measuere = 0.296296296296  
+    Average Precision =  0.184768862965
+    NDCG= 0.81228349107
+    R-Precision =  0.297709923664
+#########################################################################
+query id = 77
+for k = 5 precision = 0.4  recall = 0.0392156862745  f_measuere = 0.0714285714286  
+for k = 10 precision = 0.5  recall = 0.0980392156863  f_measuere = 0.16393442623  
+for k = 20 precision = 0.6  recall = 0.235294117647  f_measuere = 0.338028169014  
+for k = 50 precision = 0.54  recall = 0.529411764706  f_measuere = 0.534653465347  
+for k = 100 precision = 0.41  recall = 0.803921568627  f_measuere = 0.543046357616  
+    Average Precision =  0.395845617792
+    NDCG= 0.755514575604
+    R-Precision =  0.516129032258
+#########################################################################
+query id = 98
+for k = 5 precision = 0.6  recall = 0.333333333333  f_measuere = 0.428571428571  
+for k = 10 precision = 0.5  recall = 0.555555555556  f_measuere = 0.526315789474  
+for k = 20 precision = 0.4  recall = 0.888888888889  f_measuere = 0.551724137931  
+for k = 50 precision = 0.18  recall = 1.0  f_measuere = 0.305084745763  
+for k = 100 precision = 0.09  recall = 1.0  f_measuere = 0.165137614679  
+    Average Precision =  0.571529250477
+    NDCG= 0.750218266293
+    R-Precision =  0.444444444444
+#########################################################################
+query id = 71
+for k = 5 precision = 0.6  recall = 0.0283018867925  f_measuere = 0.0540540540541  
+for k = 10 precision = 0.8  recall = 0.0754716981132  f_measuere = 0.137931034483  
+for k = 20 precision = 0.9  recall = 0.169811320755  f_measuere = 0.285714285714  
+for k = 50 precision = 0.68  recall = 0.320754716981  f_measuere = 0.435897435897  
+for k = 100 precision = 0.45  recall = 0.424528301887  f_measuere = 0.436893203883  
+    Average Precision =  0.373284337176
+    NDCG= 0.844886203452
+    R-Precision =  0.401515151515
+#########################################################################
+query id = 91
+for k = 5 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 10 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 20 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 50 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 100 precision = 0.0  recall = 0.0  f_measuere = 0  
+    Average Precision =  0.00515463917526
+    NDCG= 0.131580456351
+    R-Precision =  0.0
+#########################################################################
+query id = 93
+for k = 5 precision = 1.0  recall = 0.0561797752809  f_measuere = 0.106382978723  
+for k = 10 precision = 0.9  recall = 0.101123595506  f_measuere = 0.181818181818  
+for k = 20 precision = 0.9  recall = 0.202247191011  f_measuere = 0.330275229358  
+for k = 50 precision = 0.8  recall = 0.449438202247  f_measuere = 0.575539568345  
+for k = 100 precision = 0.55  recall = 0.61797752809  f_measuere = 0.582010582011  
+    Average Precision =  0.635194417724
+    NDCG= 0.923312748997
+    R-Precision =  0.574468085106
+#########################################################################
+query id = 95
+for k = 5 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 10 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 20 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 50 precision = 0.04  recall = 0.181818181818  f_measuere = 0.0655737704918  
+for k = 100 precision = 0.03  recall = 0.272727272727  f_measuere = 0.0540540540541  
+    Average Precision =  0.0139404571491
+    NDCG= 0.269207449872
+    R-Precision =  0.0
+#########################################################################
+query id = 94
+for k = 5 precision = 0.0  recall = 0.0  f_measuere = 0  
+for k = 10 precision = 0.1  recall = 0.030303030303  f_measuere = 0.046511627907  
+for k = 20 precision = 0.25  recall = 0.151515151515  f_measuere = 0.188679245283  
+for k = 50 precision = 0.24  recall = 0.363636363636  f_measuere = 0.289156626506  
+for k = 100 precision = 0.14  recall = 0.424242424242  f_measuere = 0.210526315789  
+    Average Precision =  0.136573424634
+    NDCG= 0.519683100896
+    R-Precision =  0.216216216216
+#########################################################################
+query id = 97
+for k = 5 precision = 0.4  recall = 0.2  f_measuere = 0.266666666667  
+for k = 10 precision = 0.5  recall = 0.5  f_measuere = 0.5  
+for k = 20 precision = 0.3  recall = 0.6  f_measuere = 0.4  
+for k = 50 precision = 0.18  recall = 0.9  f_measuere = 0.3  
+for k = 100 precision = 0.1  recall = 1.0  f_measuere = 0.181818181818  
+    Average Precision =  0.38149866007
+    NDCG= 0.675201830693
+    R-Precision =  0.5
+#########################################################################
